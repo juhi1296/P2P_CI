@@ -16,7 +16,7 @@ public class Client extends P2PClientAbstract {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Enter Server Address");
 		SERVER_ADDRESS = br.readLine();
-		Socket client_to_server_conn = new Socket(SERVER_ADDRESS, PORT_NUMBER);
+		Socket client_to_server_conn = new Socket(SERVER_ADDRESS, PORT_NUMBER); // Hostname and Port Number
 		BufferedReader input_server = new BufferedReader(new InputStreamReader(client_to_server_conn.getInputStream()));
 		PrintWriter output_server = new PrintWriter(client_to_server_conn.getOutputStream(), true);
 		
@@ -29,8 +29,8 @@ public class Client extends P2PClientAbstract {
 		Thread thread = new Thread(p2pclient);
 		thread.start();
 		
-		output_server.println(hostname);
-		output_server.println(uploadPort);
+		output_server.println(hostname); //hostname is added to the active list
+		output_server.println(uploadPort); // Enter ADD, LIST ALL, LOOKUP, GET or END requests
 		
 		System.out.println(input_server.readLine());
 		System.out.println(input_server.readLine());
@@ -51,12 +51,15 @@ public class Client extends P2PClientAbstract {
 				output_server.println(message.get(3));
 				
 				String s;
-				
+				System.out.println("*****");
 				while (!(s = input_server.readLine()).equals(EOF))
 					System.out.println(s);
+				
+				System.out.println("*****");
 			}
 			else if(input.startsWith("LIST ALL") && input.split(" ").length == 3) {
 				String message = input.split(" ")[2];
+				System.out.println("*****");
 				if(!message.equals(VERSION)) {
 					System.out.println(response(-1));
 					continue;
@@ -72,11 +75,14 @@ public class Client extends P2PClientAbstract {
 				}
 				else
 					System.out.println("No Entries Found");
+				System.out.println("*****");
 			}
 			else if(input.startsWith("LOOKUP")) {
-				output_server.println(input);
+				output_server.println(input); // LOOKUP RFC 123 P2P-CI/1.0
+				output_server.println(br.readLine());  
 				output_server.println(br.readLine());
-				output_server.println(br.readLine());
+				
+				System.out.println("*****");
 				
 				if(!input.split(" ")[3].equals(VERSION)) {
 					System.out.println(response(-1));
@@ -88,13 +94,16 @@ public class Client extends P2PClientAbstract {
 				while (!(s = input_server.readLine()).equals(EOF))
 					System.out.println(s);
 				
+				System.out.println("*****");
 			}
 			else if(input.startsWith("GET")) {
 				List<String> message = new ArrayList<>();
-				message.add(input);
+				message.add(input); // GET RFC 123 P2P-CI/1
 				message.add(br.readLine());
 				message.add(br.readLine());
 				message.add(br.readLine());
+				
+				System.out.println("*****");
 				
 				if(!message.get(0).split(" ")[3].equals(VERSION)) {
 					System.out.println(response(-1));
@@ -141,7 +150,7 @@ public class Client extends P2PClientAbstract {
 		            	pw.close();
 		            
 		            System.out.println("File downloaded in directory: " + System.getProperty("user.dir") + "/" + hostname + "/" + filename);
-		            
+		            System.out.println("*****");
 		            String first = message.get(0).replace("GET", "ADD");
 					String second = new String("Host: " + hostname);
 					String third = new String("Port: " + uploadPort);
@@ -161,6 +170,8 @@ public class Client extends P2PClientAbstract {
 					while (!(i = input_server.readLine()).equals(EOF))
 						System.out.println(i);
 					
+					System.out.println("*****");
+					
 					client_client_request.close();
 				}
 				
@@ -170,16 +181,22 @@ public class Client extends P2PClientAbstract {
 				output_server.println(hostname);
 				String s;
 				
+				System.out.println("*****");
 				while (!(s = input_server.readLine()).equals(EOF))
 					System.out.println(s);
 				
+				System.out.println("*****");
 				if(client_to_server_conn != null)
 					client_to_server_conn.close();
 				System.exit(1);
 			}
 			else {
+				System.out.println("*****");
 				System.out.println("Invalid Command! Try Again.");
+				System.out.println("*****");
 			}
+			
+			//System.out.println("ENTER ADD, LIST ALL, LOOKUP, GET or END requests");
 		}
 		
 		

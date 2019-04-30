@@ -29,6 +29,8 @@ public class P2PServer extends P2PServerAbstract implements Runnable {
 			message.add(br.readLine());
 			message.add(br.readLine());
 			
+			
+			// provide hostname and port number of client
 			String hostName = message.get(0);
 			int portNumber = Integer.valueOf(message.get(1));
 			ActivePeer ap = new ActivePeer(hostName,portNumber);
@@ -40,12 +42,12 @@ public class P2PServer extends P2PServerAbstract implements Runnable {
 				message = new ArrayList<>();
 				input = br.readLine();
 				if(input.startsWith("ADD")) {
-					message.add(input);
+					message.add(input); //ADD RFC 123 P2P-CI/1.0
 					message.add(br.readLine());
 					message.add(br.readLine());
 					message.add(br.readLine());
 					
-					System.out.println("Add Request From Peer");
+					System.out.println("*****Add Request From Peer*****");
 					
 					for(int i = 0; i < message.size(); i++) {
 						System.out.println(message.get(i));
@@ -58,9 +60,9 @@ public class P2PServer extends P2PServerAbstract implements Runnable {
 					pw.println(EOF);
 				}
 				else if(input.startsWith("LIST ALL")) {
-					message.add(input);
+					message.add(input); // LIST ALL P2P-CI/1
 					
-					System.out.println("List All Requests From Peer");
+					System.out.println("*****List All Requests From Peer*****");
 					for(int i = 0; i < message.size(); i++) {
 						System.out.println(message.get(i));
 					}
@@ -77,7 +79,7 @@ public class P2PServer extends P2PServerAbstract implements Runnable {
 					}
 				}
 				else if(input.startsWith("GET")) {
-					System.out.println("GET request from peer");
+					System.out.println("*****GET request from peer*****");
 					message.add(input);
 					message.add(br.readLine());
 					message.add(br.readLine());
@@ -95,14 +97,14 @@ public class P2PServer extends P2PServerAbstract implements Runnable {
 					pw.println(String.valueOf(portN));
 				}
 				else if(input.startsWith("LOOKUP")) {
-					int code = -2;
+					int code = -2; //not found 
 					Integer portN = null;
 					Set<String> set = new HashSet<>();
-					message.add(input);
+					message.add(input); //LOOKUP RFC 123 P2P-CI/1
 					message.add(br.readLine());
 					message.add(br.readLine());
 					
-					System.out.println("Lookup Request From Peer");
+					System.out.println("*****Lookup Request From Peer*****");
 					for(int i = 0; i < message.size(); i++) {
 						System.out.println(message.get(i));
 					}
@@ -154,14 +156,14 @@ public class P2PServer extends P2PServerAbstract implements Runnable {
 						}
 					}
 					
-					System.out.println("End Request From Peer. Connection Closed From Peer");
+					System.out.println("*****End Request From Peer. Connection Closed From Peer*****");
 					pw.println("Connection Closed With Server");
 					pw.println(EOF);
 					socket.close();
 					break;
 				}
 				else {
-					System.out.println("Invaid Request");
+					System.out.println("*****Invalid Request*****");
 					pw.println("Invalid Request");
 				}
 				
